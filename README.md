@@ -1,4 +1,4 @@
-# SpeakIT: A Text to Speech Converter using AWS Polly
+# PodSPeech: A Text to Speech Converter using AWS Polly
 
 This is text-to-speech converter using [AWS Polly](https://aws.amazon.com/polly/) service. It is a simple web application that takes text as input and converts it to speech.
 
@@ -44,4 +44,3 @@ REACT_APP_REGION=<your_aws_region>
 - Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Connect with me
-- [LinkedIn](https://www.linkedin.com/in/mohitur02/)
