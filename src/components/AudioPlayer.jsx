@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { AiFillPlayCircle } from "react-icons/ai";
 import { BsPauseCircleFill } from "react-icons/bs";
-// import { BiSolidDownload } from "react-icons/bi";
 
 const AudioPlayer = ({ audioFile }) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -66,7 +65,7 @@ const AudioPlayer = ({ audioFile }) => {
 
   return (
     <div className="audio-container">
-      <audio ref={audioRef} />
+      <audio ref={audioRef} controls />
 
       <div className="progress-container">
         <div
