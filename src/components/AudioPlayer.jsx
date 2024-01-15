@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AiFillPlayCircle } from "react-icons/ai";
 import { BsPauseCircleFill } from "react-icons/bs";
-
 import { InfinitySpin } from "react-loader-spinner";
-
 import Section from "./Section";
 import useTextToSpeech from "../hooks/useTextToSpeech";
 
