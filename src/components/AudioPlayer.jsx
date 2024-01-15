@@ -1,17 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { AiFillPlayCircle } from "react-icons/ai";
 import { BsPauseCircleFill } from "react-icons/bs";
-import { toast } from "react-hot-toast";
-import AWS from "aws-sdk";
+
+import { InfinitySpin } from "react-loader-spinner";
+
 import Section from "./Section";
-
-AWS.config.update({
-  accessKeyId: process.env.REACT_APP_CLIENTID,
-  secretAccessKey: process.env.REACT_APP_SECRETKEY,
-  region: process.env.REACT_APP_REGION,
-});
-
-const polly = new AWS.Polly();
+import useTextToSpeech from "../hooks/useTextToSpeech";
 
 const AudioPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -22,44 +16,7 @@ const AudioPlayer = () => {
   const audioRef = useRef();
   const progressBarRef = useRef();
 
-  const [audioFile, setAudioFile] = useState();
-  const [error, setError] = useState();
-  const [loading, setLoading] = useState(true);
-
-  const convertTextToSpeechPromise = () => {
-    return new Promise((resolve, reject) => {
-      polly.synthesizeSpeech(
-        {
-          Text: text,
-          OutputFormat: "mp3",
-          VoiceId: "Salli",
-        },
-        (error, data) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(data);
-          }
-        }
-      );
-    });
-  };
-
-  const convertTextToSpeech = async () => {
-    try {
-      const data = await convertTextToSpeechPromise();
-
-      setLoading(false);
-      setAudioFile(data);
-      toast.success("Text converted to speech successfully!");
-    } catch (error) {
-      setLoading(false);
-      setError(error);
-      toast.error("Something went wrong!");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { audioFile, error, loading, convertTextToSpeech } = useTextToSpeech();
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -100,7 +57,7 @@ const AudioPlayer = () => {
     const audio = audioRef.current;
 
     if (!audioFile) {
-      convertTextToSpeech();
+      convertTextToSpeech(text);
     }
 
     if (isPlaying) {
@@ -114,6 +71,11 @@ const AudioPlayer = () => {
 
   return (
     <>
+      {loading && (
+        <InfinitySpin type="Circles" color="#00BFFF" height={80} width={80} />
+      )}
+      {error && <div>Error: {error.message}</div>}
+
       <Section text={text} setText={setText} />
 
       <div className="audio-container">
