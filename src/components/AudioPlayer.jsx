@@ -1,22 +1,65 @@
 import { useEffect, useRef, useState } from "react";
 import { AiFillPlayCircle } from "react-icons/ai";
 import { BsPauseCircleFill } from "react-icons/bs";
+import { toast } from "react-hot-toast";
+import AWS from "aws-sdk";
+import Section from "./Section";
 
-const AudioPlayer = ({ audioFile }) => {
+AWS.config.update({
+  accessKeyId: process.env.REACT_APP_CLIENTID,
+  secretAccessKey: process.env.REACT_APP_SECRETKEY,
+  region: process.env.REACT_APP_REGION,
+});
+
+const polly = new AWS.Polly();
+
+const AudioPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [text, setText] = useState("");
 
   const audioRef = useRef();
   const progressBarRef = useRef();
 
-  /*   
-    get audio field's current value
-    create a buffer out of the audio file (file.AudioStream.buffer)
-    create a url from the stream (Url.createObjectURL([buffer], {type: 'audio/mpeg'}))
-    pass the url stream as source for the audio fie
+  const [audioFile, setAudioFile] = useState();
+  const [error, setError] = useState();
+  const [loading, setLoading] = useState(true);
 
-    */
+  const convertTextToSpeechPromise = () => {
+    return new Promise((resolve, reject) => {
+      polly.synthesizeSpeech(
+        {
+          Text: text,
+          OutputFormat: "mp3",
+          VoiceId: "Salli",
+        },
+        (error, data) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(data);
+          }
+        }
+      );
+    });
+  };
+
+  const convertTextToSpeech = async () => {
+    try {
+      const data = await convertTextToSpeechPromise();
+
+      setLoading(false);
+      setAudioFile(data);
+      toast.success("Text converted to speech successfully!");
+    } catch (error) {
+      setLoading(false);
+      setError(error);
+      toast.error("Something went wrong!");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -55,40 +98,52 @@ const AudioPlayer = ({ audioFile }) => {
 
   const togglePlay = () => {
     const audio = audioRef.current;
+
+    if (!audioFile) {
+      convertTextToSpeech();
+    }
+
     if (isPlaying) {
       audio.pause();
     } else {
       audio.play();
     }
+
     setIsPlaying(!isPlaying);
   };
 
   return (
-    <div className="audio-container">
-      <audio ref={audioRef} controls />
+    <>
+      <Section text={text} setText={setText} />
 
-      <div className="progress-container">
-        <div
-          ref={progressBarRef}
-          className="progress-bar"
-          style={{ width: `${(currentTime / duration) * 100}%` }}
-        />
-      </div>
+      <div className="audio-container">
+        {text && <audio ref={audioRef} controls={false} />}
 
-      <div>
-        <button
-          className="audio-button play"
-          disabled={!audioFile}
-          onClick={() => togglePlay()}
-        >
-          {isPlaying ? (
-            <BsPauseCircleFill className="icon-btn" />
-          ) : (
-            <AiFillPlayCircle className="icon-btn" />
-          )}
-        </button>
+        {audioFile && (
+          <div className="progress-container">
+            <div
+              ref={progressBarRef}
+              className="progress-bar"
+              style={{ width: `${(currentTime / duration) * 100}%` }}
+            />
+          </div>
+        )}
+
+        <div>
+          <button
+            className="audio-button play"
+            disabled={!text}
+            onClick={() => togglePlay()}
+          >
+            {isPlaying ? (
+              <BsPauseCircleFill className="icon-btn" />
+            ) : (
+              <AiFillPlayCircle className="icon-btn" />
+            )}
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

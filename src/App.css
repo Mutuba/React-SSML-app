@@ -12,7 +12,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* height: 100vh; */
 }
 
 .section-container {
@@ -21,6 +20,7 @@
   background-color: #fff;
   padding: 40px;
   border-radius: 20px;
+  width: 40%;
 }
 
 textarea {
@@ -37,21 +37,9 @@ textarea:focus {
   outline: none;
 }
 
-.btn-convert {
-  background-color: #5095f8;
-  border: 1px solid #5095f8;
-  color: #fff;
-  padding: 14px;
-  margin-top: 25px;
-  width: 325px;
-  border-radius: 10px;
-  font-size: 1.25rem;
-  cursor: pointer;
-}
-
 .audio-container {
   margin-top: 4rem;
-  width: 50%;
+  width: 40%;
   background-color: #fff;
   padding: 40px;
   border-radius: 20px;
@@ -59,10 +47,6 @@ textarea:focus {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-
-.play {
-  margin-right: 50px;
 }
 
 .audio-button {
@@ -115,15 +99,7 @@ textarea:focus {
     width: 88%;
   }
 
-  .btn-convert {
-    width: 32vh;
-  }
-
   .audio-container {
     margin-top: 0;
-  }
-
-  .play {
-    margin-right: 30px;
   }
 }
