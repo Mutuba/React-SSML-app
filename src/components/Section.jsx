@@ -1,3 +1,4 @@
+import React from "react";
 import "../App.css";
 
 const Section = ({ text, setText }) => {

@@ -2,19 +2,30 @@ import { useEffect, useRef, useState } from "react";
 import { AiFillPlayCircle } from "react-icons/ai";
 import { BsPauseCircleFill } from "react-icons/bs";
 import { InfinitySpin } from "react-loader-spinner";
+import { useDispatch, useSelector } from "react-redux";
+
 import Section from "./Section";
 import useTextToSpeech from "../hooks/useTextToSpeech";
+import { fetchContent as fetchContentAction } from "../actions/contentActions";
 
 const AudioPlayer = () => {
+  const dispatch = useDispatch();
+  const content = useSelector((state) => state.content.content);
+  const contentLoading = useSelector((state) => state.content.loading);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [text, setText] = useState("");
+  const [text, setText] = useState(content);
 
   const audioRef = useRef();
   const progressBarRef = useRef();
 
   const { audioFile, error, loading, convertTextToSpeech } = useTextToSpeech();
+
+  useEffect(() => {
+    dispatch(fetchContentAction());
+    setText(content);
+  }, [dispatch, content]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -69,9 +80,9 @@ const AudioPlayer = () => {
 
   return (
     <>
-      {loading && (
+      {loading || contentLoading ? (
         <InfinitySpin type="Circles" color="#00BFFF" height={80} width={80} />
-      )}
+      ) : null}
       {error && <div>Error: {error.message}</div>}
 
       <Section text={text} setText={setText} />
@@ -89,9 +100,9 @@ const AudioPlayer = () => {
           </div>
         )}
 
-        <div>
+        <div className="buttons">
           <button
-            className="audio-button play"
+            className="audio-button"
             disabled={!text}
             onClick={() => togglePlay()}
           >
@@ -100,6 +111,19 @@ const AudioPlayer = () => {
             ) : (
               <AiFillPlayCircle className="icon-btn" />
             )}
+          </button>
+          <button
+            className="load-more-button"
+            onClick={() => dispatch(fetchContentAction())}
+          >
+            Load More Content
+          </button>
+          <button
+            className="clear-button"
+            onClick={() => setText("")}
+            disabled={!text}
+          >
+            Clear Text
           </button>
         </div>
       </div>
