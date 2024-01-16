@@ -36,10 +36,10 @@ const useTextToSpeech = () => {
     });
   };
 
-  const convertTextToSpeech = async (text, useSSML = false) => {
+  const convertTextToSpeech = async (text, ssml) => {
     try {
       setLoading(true);
-      const data = await convertTextToSpeechPromise(text, useSSML);
+      const data = await convertTextToSpeechPromise(text, ssml);
       setAudioFile(data);
     } catch (error) {
       setError(error);

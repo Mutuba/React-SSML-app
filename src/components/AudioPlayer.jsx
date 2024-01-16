@@ -17,6 +17,7 @@ const AudioPlayer = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [text, setText] = useState(content);
+  const [ssml, setSSML] = useState(false);
 
   const audioRef = useRef();
   const progressBarRef = useRef();
@@ -26,7 +27,7 @@ const AudioPlayer = () => {
   useEffect(() => {
     dispatch(fetchContentAction());
     setText(content);
-  }, [dispatch, content]);
+  }, [content, dispatch]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -67,7 +68,7 @@ const AudioPlayer = () => {
     const audio = audioRef.current;
 
     if (!audioFile) {
-      convertTextToSpeech(text);
+      convertTextToSpeech(text, ssml);
     }
 
     if (isPlaying) {
@@ -86,12 +87,12 @@ const AudioPlayer = () => {
       ) : null}
       {error || contentError ? <div>Oops! Something went wrong</div> : null}
 
-      <Section text={text} setText={setText} />
+      <Section text={text} setText={setText} ssml={ssml} setSSML={setSSML} />
 
       <div className="audio-container">
         {text && <audio ref={audioRef} controls={false} />}
 
-        {audioFile && (
+        {audioFile && text ? (
           <div className="progress-container">
             <div
               ref={progressBarRef}
@@ -99,7 +100,7 @@ const AudioPlayer = () => {
               style={{ width: `${(currentTime / duration) * 100}%` }}
             />
           </div>
-        )}
+        ) : null}
 
         <div className="buttons">
           <button
