@@ -12,6 +12,7 @@ const AudioPlayer = () => {
   const dispatch = useDispatch();
   const content = useSelector((state) => state.content.content);
   const contentLoading = useSelector((state) => state.content.loading);
+  const contentError = useSelector((state) => state.content.error);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -83,7 +84,7 @@ const AudioPlayer = () => {
       {loading || contentLoading ? (
         <InfinitySpin type="Circles" color="#00BFFF" height={80} width={80} />
       ) : null}
-      {error && <div>Error: {error.message}</div>}
+      {error || contentError ? <div>Oops! Something went wrong</div> : null}
 
       <Section text={text} setText={setText} />
 
