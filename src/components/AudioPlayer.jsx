@@ -3,7 +3,6 @@ import { AiFillPlayCircle } from "react-icons/ai";
 import { BsPauseCircleFill } from "react-icons/bs";
 import { InfinitySpin } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
-
 import Section from "./Section";
 import useTextToSpeech from "../hooks/useTextToSpeech";
 import { fetchContent as fetchContentAction } from "../actions/contentActions";
