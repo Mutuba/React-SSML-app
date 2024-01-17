@@ -22,7 +22,8 @@ const AudioPlayer = () => {
   const audioRef = useRef();
   const progressBarRef = useRef();
 
-  const { audioFile, error, loading, convertTextToSpeech } = useTextToSpeech();
+  const { audioFile, error, loading, convertTextToSpeech, setAudioFile } =
+    useTextToSpeech();
 
   useEffect(() => {
     dispatch(fetchContentAction());
@@ -76,8 +77,21 @@ const AudioPlayer = () => {
     } else {
       audio.play();
     }
-
     setIsPlaying(!isPlaying);
+  };
+
+  const resetAudioPlayer = () => {
+    setText("");
+    setAudioFile(null);
+  };
+
+  const formatTime = (timeInSeconds) => {
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = Math.floor(timeInSeconds % 60);
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
+      2,
+      "0"
+    )}`;
   };
 
   return (
@@ -90,19 +104,27 @@ const AudioPlayer = () => {
       <Section text={text} setText={setText} ssml={ssml} setSSML={setSSML} />
 
       <div className="audio-container">
-        {text && <audio ref={audioRef} controls={false} />}
+        <audio ref={audioRef} />
 
         {audioFile && text ? (
-          <div className="progress-container">
-            <div
-              ref={progressBarRef}
-              className="progress-bar"
-              style={{ width: `${(currentTime / duration) * 100}%` }}
-            />
-          </div>
+          <>
+            <div className="progress-container">
+              <div
+                ref={progressBarRef}
+                className="progress-bar"
+                style={{ width: `${(currentTime / duration) * 100}%` }}
+              />
+            </div>
+
+            <div className="time-info">
+              <span>{formatTime(currentTime)}</span>
+              <span>/</span>
+              <span>{formatTime(duration)}</span>
+            </div>
+          </>
         ) : null}
 
-        <div className="buttons">
+        <div className="play-button">
           <button
             className="audio-button"
             disabled={!text}
@@ -114,6 +136,9 @@ const AudioPlayer = () => {
               <AiFillPlayCircle className="icon-btn" />
             )}
           </button>
+        </div>
+
+        <div className="buttons">
           <button
             className="load-more-button"
             onClick={() => dispatch(fetchContentAction())}
@@ -122,7 +147,7 @@ const AudioPlayer = () => {
           </button>
           <button
             className="clear-button"
-            onClick={() => setText("")}
+            onClick={() => resetAudioPlayer()}
             disabled={!text}
           >
             Clear Text

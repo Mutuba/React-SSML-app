@@ -48,7 +48,7 @@ const useTextToSpeech = () => {
     }
   };
 
-  return { audioFile, error, loading, convertTextToSpeech };
+  return { audioFile, error, loading, convertTextToSpeech, setAudioFile };
 };
 
 export default useTextToSpeech;
