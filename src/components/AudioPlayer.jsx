@@ -82,6 +82,12 @@ const AudioPlayer = () => {
   const resetAudioPlayer = () => {
     setText("");
     setAudioFile(null);
+
+    const audio = audioRef.current;
+    if (audio) {
+      audio.pause();
+      setIsPlaying(false);
+    }
   };
 
   const formatTime = (timeInSeconds) => {
