@@ -63,7 +63,7 @@ textarea:focus {
   padding: 14px;
   width: 325px;
   border-radius: 10px;
-  font-size: 1.25rem;
+  font-size: 1rem;
   cursor: pointer;
   margin: 0 1rem;
 }
@@ -73,6 +73,12 @@ textarea:focus {
   opacity: 0.5;
 }
 
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
 .icon-btn {
   color: #5095f8;
 }
@@ -93,10 +99,17 @@ textarea:focus {
 .checkbox-input {
   margin-left: 0.2rem;
 }
-@media screen and (max-width: 960px) {
+@media screen and (max-width: 1380px) {
   * {
     padding: 0;
     margin: 0;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   .section-container {
@@ -109,6 +122,16 @@ textarea:focus {
     align-items: center;
   }
 
+  .audio-container {
+    margin: 2rem;
+    width: 90vw;
+    padding: 12px;
+  }
+  .load-more-button,
+  .clear-button {
+    width: 100%;
+  }
+
   .checkbox {
     display: flex;
     flex-direction: row;
@@ -116,12 +139,6 @@ textarea:focus {
     align-self: flex-start;
     margin-top: 1rem;
     font-size: smaller;
-  }
-
-  .audio-container {
-    margin: 2rem;
-    width: 90vw;
-    padding: 12px;
   }
   .clear-button {
     margin-top: 1rem;
