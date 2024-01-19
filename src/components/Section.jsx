@@ -11,14 +11,13 @@ const Section = ({ text, setText, ssml, setSSML }) => {
         onChange={(e) => setText(e.target.value)}
       ></textarea>
       <div className="checkbox">
-        <label>
-          Use SSML:
-          <input
-            type="checkbox"
-            checked={ssml}
-            onChange={() => setSSML(!ssml)}
-          />
-        </label>
+        <label>Use SSML:</label>
+        <input
+          className="checkbox-input"
+          type="checkbox"
+          checked={ssml}
+          onChange={() => setSSML(!ssml)}
+        />
       </div>
     </div>
   );
