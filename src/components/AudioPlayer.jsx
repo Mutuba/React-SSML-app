@@ -111,7 +111,7 @@ const AudioPlayer = () => {
       <div className="audio-container">
         <audio ref={audioRef} />
 
-        {audioFile && text ? (
+        {audioFile ? (
           <>
             <div className="progress-container">
               <div
@@ -129,7 +129,7 @@ const AudioPlayer = () => {
           </>
         ) : null}
 
-        <div className="play-button">
+        <div>
           <button
             className="audio-button"
             disabled={!text}
