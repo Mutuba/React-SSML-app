@@ -15,7 +15,7 @@ const AudioPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [text, setText] = useState(content);
+  const [text, setText] = useState(content || "");
   const [ssml, setSSML] = useState(false);
 
   const audioRef = useRef();
