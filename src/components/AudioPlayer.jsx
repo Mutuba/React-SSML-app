@@ -104,6 +104,7 @@ const AudioPlayer = () => {
       {loading || contentLoading ? (
         <InfinitySpin type="Circles" color="#00BFFF" height={80} width={80} />
       ) : null}
+
       {error || contentError ? <div>Oops! Something went wrong</div> : null}
 
       <Section text={text} setText={setText} ssml={ssml} setSSML={setSSML} />
