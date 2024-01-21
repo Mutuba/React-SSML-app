@@ -14,7 +14,7 @@ const useTextToSpeech = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const convertTextToSpeechPromise = (text, ssml = false) => {
+  const convertTextToSpeechPromise = (text, ssml) => {
     const params = {
       Text: text,
       OutputFormat: "mp3",
