@@ -42,6 +42,7 @@ const useTextToSpeech = () => {
       const data = await convertTextToSpeechPromise(text, ssml);
       setAudioFile(data);
     } catch (error) {
+      setLoading(false);
       setError(error);
     } finally {
       setLoading(false);
