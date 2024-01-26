@@ -15,8 +15,9 @@ const Section = ({ text, setText, ssml, setSSML }) => {
         onChange={(e) => setText(e.target.value)}
       ></textarea>
       <div className="checkbox">
-        <label>Use SSML:</label>
+        <label htmlFor="ssmlCheckbox">Use SSML:</label>
         <input
+          id="ssmlCheckbox"
           className="checkbox-input"
           type="checkbox"
           checked={ssml}

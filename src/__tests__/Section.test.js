@@ -30,7 +30,8 @@ describe("Section", () => {
       />
     );
     const textInput = screen.getByRole("textbox");
-    fireEvent.change(textInput, { target: { value: "New text" } });
+    fireEvent.input(textInput, { target: { value: "New text" } });
+
     expect(setTextMock).toHaveBeenCalledWith("New text");
   });
 
@@ -60,7 +61,7 @@ describe("Section", () => {
         text="Sample text"
       />
     );
-    const checkbox = screen.getByRole("checkbox");
+    const checkbox = screen.getByLabelText("Use SSML:");
     userEvent.click(checkbox);
     expect(setSSMLMock).toHaveBeenCalledWith(true);
   });
