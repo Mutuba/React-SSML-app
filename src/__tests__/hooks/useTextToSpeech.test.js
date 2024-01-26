@@ -1,10 +1,10 @@
-import AWS from "aws-sdk"; // Import AWS SDK
+import AWS from "aws-sdk";
 import useTextToSpeech from "../../hooks/useTextToSpeech";
 
 jest.mock("aws-sdk");
 
 test("calls AWS Polly with correct parameters", () => {
-  jest.useFakeTimers(); // Use fake timers for better control
+  jest.useFakeTimers();
 
   const mockPolly = AWS.Polly.mockImplementation(() => ({
     synthesizeSpeech: jest.fn(),
@@ -12,7 +12,7 @@ test("calls AWS Polly with correct parameters", () => {
   const { convertTextToSpeech } = useTextToSpeech();
   convertTextToSpeech("test text", false);
 
-  jest.runAllTimers(); // Ensure timers are executed
+  jest.runAllTimers();
 
   expect(mockPolly).toHaveBeenCalledWith({
     Text: "test text",
