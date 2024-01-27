@@ -14,7 +14,7 @@ const useTextToSpeech = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const convertTextToSpeechPromise = (text, ssml) => {
+  const convertTextToSpeech = async (text, ssml) => {
     const params = {
       Text: text,
       OutputFormat: "mp3",
@@ -25,21 +25,9 @@ const useTextToSpeech = () => {
       params.TextType = "ssml";
     }
 
-    return new Promise((resolve, reject) => {
-      polly.synthesizeSpeech(params, (error, data) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(data);
-        }
-      });
-    });
-  };
-
-  const convertTextToSpeech = async (text, ssml) => {
     try {
-      setLoading(true);
-      const data = await convertTextToSpeechPromise(text, ssml);
+      const data = await polly.synthesizeSpeech(params).promise();
+      setLoading(false);
       setAudioFile(data);
     } catch (error) {
       setLoading(false);

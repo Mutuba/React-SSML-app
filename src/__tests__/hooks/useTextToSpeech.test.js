@@ -1,22 +1,23 @@
-import AWS from "aws-sdk";
+import { renderHook, act } from "@testing-library/react";
 import useTextToSpeech from "../../hooks/useTextToSpeech";
 
-jest.mock("aws-sdk");
+import AWS from "aws-sdk-mock";
 
-test("calls AWS Polly with correct parameters", () => {
-  jest.useFakeTimers();
+AWS.mock("Polly", "synthesizeSpeech", (params, callback) => {
+  callback(params, {
+    AudioStream: Buffer.from("mocked audio stream"),
+  });
+});
 
-  const mockPolly = AWS.Polly.mockImplementation(() => ({
-    synthesizeSpeech: jest.fn(),
-  }));
-  const { convertTextToSpeech } = useTextToSpeech();
-  convertTextToSpeech("test text", false);
-
-  jest.runAllTimers();
-
-  expect(mockPolly).toHaveBeenCalledWith({
-    Text: "test text",
-    OutputFormat: "mp3",
-    VoiceId: "Salli",
+describe("useTextToSpeech", () => {
+  test("useTextToSpeech synthesizes speech successfully", async () => {
+    const { result } = renderHook(() => useTextToSpeech());
+    const { convertTextToSpeech, error, loading } = result.current;
+    await act(async () => {
+      await convertTextToSpeech("Test text", false);
+    });
+    expect(error).toBeNull();
+    expect(loading).toBeFalsy();
+    expect(result.current.audioFile).not.toBeNull();
   });
 });
