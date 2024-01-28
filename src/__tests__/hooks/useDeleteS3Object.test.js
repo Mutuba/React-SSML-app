@@ -9,21 +9,18 @@ describe("Test Delete S3 object", () => {
   });
 
   afterEach(() => {
-    AWSMock.restore("Polly");
+    AWSMock.restore("S3");
   });
 
   it("Should be successfully completed", async () => {
     const successResult = { success: true };
-    AWSMock.mock("Polly", "synthesizeSpeech", (params, callback) => {
-      expect(params).toEqual({
-        OutputFormat: "mp3",
-        Text: "Test text",
-        VoiceId: "Salli",
-      });
+    AWSMock.mock("S3", "deleteObject", (params, callback) => {
+      expect(params).toEqual({ Bucket: "test", Key: "test" });
       return callback(null, successResult);
     });
 
-    const paramsTest = "Test text";
+    const paramsTest = { Bucket: "test", Key: "test" };
+
     const { result } = renderHook(() => useDeleteS3Object());
     const { deleteS3Object } = result.current;
 
@@ -35,16 +32,12 @@ describe("Test Delete S3 object", () => {
 
   it("Should fail", async () => {
     const failResult = { success: false };
-    AWSMock.mock("Polly", "synthesizeSpeech", (params, callback) => {
-      expect(params).toEqual({
-        OutputFormat: "mp3",
-        Text: "Test text",
-        VoiceId: "Salli",
-      });
+    AWSMock.mock("S3", "deleteObject", (params, callback) => {
+      expect(params).toEqual({ Bucket: "test", Key: "test" });
       return callback(failResult);
     });
 
-    const paramsTest = "Test text";
+    const paramsTest = { Bucket: "test", Key: "test" };
     const { result } = renderHook(() => useDeleteS3Object());
     const { deleteS3Object } = result.current;
 
