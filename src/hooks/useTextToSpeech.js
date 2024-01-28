@@ -28,7 +28,6 @@ const useTextToSpeech = () => {
 
       setLoading(false);
       setAudioFile(data);
-      console.log("Data", data);
       return data;
     } catch (error) {
       setLoading(false);
