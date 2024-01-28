@@ -16,7 +16,7 @@ describe("useTextToSpeech", () => {
     const successResult = {
       ContentType: "audio/mpeg",
       RequestCharacters: 6,
-      AudioStream: ["Buffer"],
+      AudioStream: Buffer.from("mocked audio"),
     };
 
     AWSMock.mock("Polly", "synthesizeSpeech", (params, callback) => {
