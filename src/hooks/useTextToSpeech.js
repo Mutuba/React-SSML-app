@@ -24,21 +24,22 @@ const useTextToSpeech = () => {
     if (ssml) {
       params.TextType = "ssml";
     }
-
     try {
       const data = await polly.synthesizeSpeech(params).promise();
-      console.log(data);
+
       setLoading(false);
       setAudioFile(data);
+      return data;
     } catch (error) {
       setLoading(false);
       setError(error);
+      return error;
     } finally {
       setLoading(false);
     }
   };
 
-  return { audioFile, error, loading, convertTextToSpeech, setAudioFile };
+  return { loading, audioFile, error, setAudioFile, convertTextToSpeech };
 };
 
 export default useTextToSpeech;
