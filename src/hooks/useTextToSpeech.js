@@ -7,9 +7,8 @@ AWS.config.update({
   region: process.env.REACT_APP_REGION,
 });
 
-const polly = new AWS.Polly();
-
 const useTextToSpeech = () => {
+  const polly = new AWS.Polly();
   const [audioFile, setAudioFile] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -29,6 +28,7 @@ const useTextToSpeech = () => {
 
       setLoading(false);
       setAudioFile(data);
+      console.log("Data", data);
       return data;
     } catch (error) {
       setLoading(false);

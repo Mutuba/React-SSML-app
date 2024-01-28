@@ -1,5 +1,12 @@
 import { useState } from "react";
 import AWS from "aws-sdk";
+
+AWS.config.update({
+  accessKeyId: process.env.REACT_APP_CLIENTID,
+  secretAccessKey: process.env.REACT_APP_SECRETKEY,
+  region: process.env.REACT_APP_REGION,
+});
+
 const useDeleteS3Object = () => {
   const [audioFile, setAudioFile] = useState(null);
   const [loading, setLoading] = useState(false);
