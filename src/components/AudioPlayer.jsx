@@ -1,17 +1,21 @@
 import { useEffect, useRef, useState } from "react";
+// import axios from "axios";
 import { AiFillPlayCircle } from "react-icons/ai";
 import { BsPauseCircleFill } from "react-icons/bs";
 import { InfinitySpin } from "react-loader-spinner";
-import { useDispatch, useSelector } from "react-redux";
+// import { useDispatch, useSelector } from "react-redux";
 import Section from "./Section";
 import useTextToSpeech from "../hooks/useTextToSpeech";
-import { fetchContent as fetchContentAction } from "../actions/contentActions";
+// import { fetchContent as fetchContentAction } from "../actions/contentActions";
 
 const AudioPlayer = () => {
-  const dispatch = useDispatch();
-  const content = useSelector((state) => state.content.content);
-  const contentLoading = useSelector((state) => state.content.loading);
-  const contentError = useSelector((state) => state.content.error);
+  //   const dispatch = useDispatch();
+  //   const content = useSelector((state) => state.content.content);
+  //   const contentLoading = useSelector((state) => state.content.loading);
+  //   const contentError = useSelector((state) => state.content.error);
+  const [content, setContent] = useState(null);
+  const [contentLoading, setContentLoading] = useState(true);
+  const [contentError, setContentError] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -24,10 +28,28 @@ const AudioPlayer = () => {
   const { audioFile, error, loading, convertTextToSpeech, setAudioFile } =
     useTextToSpeech();
 
+  const fetchContent = async () => {
+    const key = process.env.REACT_APP_NEWS_API_KEY;
+    const url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${key}`;
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      const articles = data.articles;
+      const articlesContent = articles
+        .map((article) => article.title)
+        .join(".");
+      setContent(articlesContent);
+      setText(articlesContent);
+    } catch (e) {
+      setContentError(e);
+      setContentLoading(false);
+    } finally {
+      setContentLoading(false);
+    }
+  };
   useEffect(() => {
-    dispatch(fetchContentAction());
-    setText(content);
-  }, [content, dispatch]);
+    fetchContent();
+  }, []);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -145,10 +167,7 @@ const AudioPlayer = () => {
         </div>
 
         <div className="buttons">
-          <button
-            className="load-more-button"
-            onClick={() => dispatch(fetchContentAction())}
-          >
+          <button className="load-more-button" onClick={() => fetchContent()}>
             Load More Content
           </button>
           <button
