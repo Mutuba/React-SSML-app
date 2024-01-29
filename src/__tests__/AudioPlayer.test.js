@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import AudioPlayer from "../components/AudioPlayer";
 global.fetch = jest.fn();
 
@@ -44,4 +44,14 @@ describe("AudioPlayer", () => {
       );
     });
   });
+
+  //   test("calls useTextToSpeech on play click", () => {
+  //   const mockConvertTextToSpeech = jest.fn();
+  //   useTextToSpeech.mockReturnValue({
+  //     convertTextToSpeech: mockConvertTextToSpeech,
+  //   });
+  //   render(<AudioPlayer />);
+  //   fireEvent.click(screen.getByRole("button"));
+  //   expect(mockConvertTextToSpeech).toHaveBeenCalled();
+  // });
 });

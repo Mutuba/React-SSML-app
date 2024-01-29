@@ -68,8 +68,8 @@ textarea:focus {
   margin: 0 1rem;
 }
 
-.audio-button,
-.clear-button:disabled {
+.clear-button:disabled,
+.audio-button:disabled {
   opacity: 0.5;
 }
 

@@ -25,7 +25,7 @@ describe("useTextToSpeech", () => {
         Text: "Test text",
         VoiceId: "Salli",
       });
-      return callback(successResult);
+      return callback(null, successResult);
     });
 
     const { result } = renderHook(() => useTextToSpeech());
@@ -46,7 +46,7 @@ describe("useTextToSpeech", () => {
         Text: "Test text",
         VoiceId: "Salli",
       });
-      return callback(failResult);
+      callback(failResult);
     });
     const { result } = renderHook(() => useTextToSpeech());
     const { convertTextToSpeech, loading } = result.current;

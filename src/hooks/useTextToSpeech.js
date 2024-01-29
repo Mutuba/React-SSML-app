@@ -24,6 +24,7 @@ const useTextToSpeech = () => {
       params.TextType = "ssml";
     }
     try {
+      setLoading(true);
       const data = await polly.synthesizeSpeech(params).promise();
 
       setLoading(false);

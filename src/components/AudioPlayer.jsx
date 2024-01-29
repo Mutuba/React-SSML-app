@@ -54,7 +54,6 @@ const AudioPlayer = () => {
 
   useEffect(() => {
     const audio = audioRef.current;
-
     if (audioFile) {
       const audioArrayBuffer = audioFile.AudioStream.buffer;
       const audioURL = URL.createObjectURL(
@@ -65,9 +64,11 @@ const AudioPlayer = () => {
 
       audio.addEventListener("loadeddata", () => {
         setDuration(audio.duration);
+        audio.play();
       });
 
       audio.addEventListener("timeupdate", updateProgressBar);
+
       audio.addEventListener("ended", () => {
         setIsPlaying(false);
       });
@@ -87,25 +88,38 @@ const AudioPlayer = () => {
     setCurrentTime(audio.currentTime);
   };
 
-  const togglePlay = () => {
+  const togglePlay = async () => {
     const audio = audioRef.current;
 
     if (!audioFile) {
-      convertTextToSpeech(text, ssml);
+      const newAudio = await convertTextToSpeech(text, ssml);
+      setAudioFile(newAudio);
     }
 
-    if (isPlaying) {
-      audio.pause();
+    const playPauseHandler = () => {
+      if (isPlaying) {
+        audio.pause();
+      } else {
+        audio.play();
+      }
+    };
+
+    if (audio.readyState >= 2) {
+      playPauseHandler();
     } else {
-      audio.play();
+      const canPlayThroughHandler = () => {
+        audio.removeEventListener("canplaythrough", canPlayThroughHandler);
+        playPauseHandler();
+      };
+      audio.addEventListener("canplaythrough", canPlayThroughHandler);
     }
+
     setIsPlaying(!isPlaying);
   };
 
   const resetAudioPlayer = () => {
     setText("");
     setAudioFile(null);
-
     const audio = audioRef.current;
     if (audio) {
       audio.pause();
@@ -156,7 +170,7 @@ const AudioPlayer = () => {
         <div>
           <button
             className="audio-button"
-            disabled={!text}
+            disabled={!text || loading}
             onClick={() => togglePlay()}
           >
             {isPlaying ? (
@@ -173,7 +187,7 @@ const AudioPlayer = () => {
           </button>
           <button
             className="clear-button"
-            onClick={() => resetAudioPlayer()}
+            onClick={async () => resetAudioPlayer()}
             disabled={!text}
           >
             Clear Text
