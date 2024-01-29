@@ -8,11 +8,12 @@ describe("AudioPlayer", () => {
 
   test("renders player controls, progress bar, and time info", async () => {
     const resolvedData = {
-      articles: {
-        title: "UNRWA Hamas attack claims: UK becomes latest country to pause",
-      },
-
-      title: "Aryna Sabalenka beats Zheng Qinwen for Australian Open women’s ",
+      articles: [
+        {
+          title:
+            "UNRWA Hamas attack claims: UK becomes latest country to pause",
+        },
+      ],
     };
 
     fetch.mockResolvedValue({
@@ -31,6 +32,16 @@ describe("AudioPlayer", () => {
       expect(
         screen.getByRole("button", { name: "Clear Text" })
       ).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(screen.getByRole("textbox")).not.toHaveValue("");
+    });
+
+    await waitFor(() => {
+      expect(screen.getByRole("textbox")).toHaveValue(
+        resolvedData.articles.title
+      );
     });
   });
 });

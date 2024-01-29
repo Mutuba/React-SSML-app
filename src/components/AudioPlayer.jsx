@@ -33,12 +33,14 @@ const AudioPlayer = () => {
     try {
       const response = await fetch(url);
       const data = await response.json();
+
       const articles = data.articles;
       const articlesContent = articles
         .map((article) => article.title)
         .join(".");
       setContent(articlesContent);
       setText(articlesContent);
+      setContentLoading(false);
     } catch (e) {
       setContentError(e);
       setContentLoading(false);
