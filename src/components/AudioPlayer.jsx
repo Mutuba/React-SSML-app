@@ -29,8 +29,8 @@ const AudioPlayer = () => {
     useTextToSpeech();
 
   const fetchContent = async () => {
-    const key = process.env.REACT_APP_NEWS_API_KEY;
-    const url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${key}`;
+    const API_KEY = process.env.REACT_APP_NEWS_API_KEY;
+    const url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`;
     try {
       const response = await fetch(url);
       const data = await response.json();
