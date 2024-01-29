@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-// import axios from "axios";
 import { AiFillPlayCircle } from "react-icons/ai";
 import { BsPauseCircleFill } from "react-icons/bs";
 import { InfinitySpin } from "react-loader-spinner";
