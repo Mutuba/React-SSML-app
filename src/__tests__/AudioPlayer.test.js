@@ -1,11 +1,9 @@
 import React from "react";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import AudioPlayer from "../components/AudioPlayer";
 global.fetch = jest.fn();
 
 describe("AudioPlayer", () => {
-  // jest.mock("../../hooks/useTextToSpeech.js");
-
   test("renders player controls, progress bar, and time info", async () => {
     const resolvedData = {
       articles: [
