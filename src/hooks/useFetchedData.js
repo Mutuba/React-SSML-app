@@ -14,7 +14,6 @@ const useFetchedData = () => {
         const response = await fetch(API_URL, {
           signal: abortController.signal,
         });
-
         const json = await response.json();
         setData(json);
       } catch (error) {
