@@ -67,7 +67,9 @@ const AudioPlayer = () => {
         audio.play();
       });
 
-      audio.addEventListener("timeupdate", updateProgressBar);
+      audio.addEventListener("timeupdate", () => {
+        setCurrentTime(audio.currentTime);
+      });
 
       audio.addEventListener("ended", () => {
         setIsPlaying(false);
@@ -75,18 +77,15 @@ const AudioPlayer = () => {
 
       return () => {
         URL.revokeObjectURL(audioURL);
-        audio.removeEventListener("timeupdate", updateProgressBar);
+        audio.removeEventListener("timeupdate", () => {
+          setCurrentTime(audio.currentTime);
+        });
         audio.removeEventListener("ended", () => {
           setIsPlaying(false);
         });
       };
     }
   }, [audioFile]);
-
-  const updateProgressBar = () => {
-    const audio = audioRef.current;
-    setCurrentTime(audio.currentTime);
-  };
 
   const togglePlay = async () => {
     const audio = audioRef.current;
