@@ -26,8 +26,6 @@ const useTextToSpeech = () => {
     try {
       setLoading(true);
       const data = await polly.synthesizeSpeech(params).promise();
-
-      setLoading(false);
       setAudioFile(data);
       return data;
     } catch (error) {
