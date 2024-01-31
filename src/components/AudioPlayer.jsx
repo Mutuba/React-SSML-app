@@ -103,6 +103,14 @@ const AudioPlayer = () => {
       }
     };
 
+    /* readyState values:
+        0: HAVE_NOTHING - No information is available about the media resource.
+        1: HAVE_METADATA - Metadata (like duration and dimensions) is available.
+        2: HAVE_CURRENT_DATA - Enough data is available for the current playback position.
+        3: HAVE_FUTURE_DATA - Enough data is available for the current and next playback positions.
+        4: HAVE_ENOUGH_DATA - Enough data is available for the entire media resource.
+    */
+
     if (audio.readyState >= 2) {
       playPauseHandler();
     } else {
