@@ -1,7 +1,7 @@
 import React from "react";
 import { screen, render, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Section from "../components/Section";
+import Section from "../components/SpeechTextEditor";
 
 describe("Section", () => {
   test("should render", () => {

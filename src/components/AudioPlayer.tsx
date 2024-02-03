@@ -3,26 +3,28 @@ import { AiFillPlayCircle } from "react-icons/ai";
 import { BsPauseCircleFill } from "react-icons/bs";
 import { InfinitySpin } from "react-loader-spinner";
 // import { useDispatch, useSelector } from "react-redux";
-import Section from "./Section";
+import SpeechTextEditor from "./SpeechTextEditor";
 import useTextToSpeech from "../hooks/useTextToSpeech";
 // import { fetchContent as fetchContentAction } from "../actions/contentActions";
 
-const AudioPlayer = () => {
+interface AudioPlayerProps {}
+
+const AudioPlayer: React.FC<AudioPlayerProps> = () => {
   //   const dispatch = useDispatch();
   //   const content = useSelector((state) => state.content.content);
   //   const contentLoading = useSelector((state) => state.content.loading);
   //   const contentError = useSelector((state) => state.content.error);
-  const [content, setContent] = useState(null);
+  const [content, setContent] = useState<string | null>(null);
   const [contentLoading, setContentLoading] = useState(true);
-  const [contentError, setContentError] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [text, setText] = useState(content || "");
-  const [ssml, setSSML] = useState(false);
+  const [contentError, setContentError] = useState<Error | null>(null);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [currentTime, setCurrentTime] = useState<number>(0);
+  const [duration, setDuration] = useState<number>(0);
+  const [text, setText] = useState<string>(content || "");
+  const [ssml, setSSML] = useState<boolean>(false);
 
-  const audioRef = useRef();
-  const progressBarRef = useRef();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const progressBarRef = useRef<HTMLDivElement | null>(null);
 
   const { audioFile, error, loading, convertTextToSpeech, setAudioFile } =
     useTextToSpeech();
@@ -34,14 +36,15 @@ const AudioPlayer = () => {
       const response = await fetch(url);
       const data = await response.json();
 
-      const articles = data.articles;
+      const articles = (data as { articles: { title: string }[] }).articles;
+
       const articlesContent = articles
         .map((article) => article.title)
         .join(".");
       setContent(articlesContent);
       setText(articlesContent);
       setContentLoading(false);
-    } catch (e) {
+    } catch (e: any) {
       setContentError(e);
       setContentLoading(false);
     } finally {
@@ -54,7 +57,9 @@ const AudioPlayer = () => {
 
   useEffect(() => {
     const audio = audioRef.current;
-    if (audioFile) {
+
+    if (audio && audioFile) {
+      console.log("Response", audioFile);
       const audioArrayBuffer = audioFile.AudioStream.buffer;
       const audioURL = URL.createObjectURL(
         new Blob([audioArrayBuffer], { type: "audio/mpeg" })
@@ -90,38 +95,39 @@ const AudioPlayer = () => {
   const togglePlay = async () => {
     const audio = audioRef.current;
 
-    if (!audioFile) {
-      const newAudio = await convertTextToSpeech(text, ssml);
-      setAudioFile(newAudio);
-    }
-
-    const playPauseHandler = () => {
-      if (isPlaying) {
-        audio.pause();
-      } else {
-        audio.play();
+    if (audio) {
+      if (!audioFile) {
+        const newAudio = await convertTextToSpeech(text, ssml);
+        setAudioFile(newAudio);
       }
-    };
 
-    /* readyState values:
-        0: HAVE_NOTHING - No information is available about the media resource.
-        1: HAVE_METADATA - Metadata (like duration and dimensions) is available.
-        2: HAVE_CURRENT_DATA - Enough data is available for the current playback position.
-        3: HAVE_FUTURE_DATA - Enough data is available for the current and next playback positions.
-        4: HAVE_ENOUGH_DATA - Enough data is available for the entire media resource.
-    */
-
-    if (audio.readyState >= 2) {
-      playPauseHandler();
-    } else {
-      const canPlayThroughHandler = () => {
-        audio.removeEventListener("canplaythrough", canPlayThroughHandler);
-        playPauseHandler();
+      const playPauseHandler = () => {
+        if (isPlaying) {
+          audio.pause();
+        } else {
+          audio.play();
+        }
       };
-      audio.addEventListener("canplaythrough", canPlayThroughHandler);
-    }
 
-    setIsPlaying(!isPlaying);
+      /* readyState values:
+      0: HAVE_NOTHING - No information is available about the media resource.
+      1: HAVE_METADATA - Metadata (like duration and dimensions) is available.
+      2: HAVE_CURRENT_DATA - Enough data is available for the current playback position.
+      3: HAVE_FUTURE_DATA - Enough data is available for the current and next playback positions.
+      4: HAVE_ENOUGH_DATA - Enough data is available for the entire media resource.
+  */
+      if (audio.readyState >= 2) {
+        playPauseHandler();
+      } else {
+        const canPlayThroughHandler = () => {
+          audio.removeEventListener("canplaythrough", canPlayThroughHandler);
+          playPauseHandler();
+        };
+        audio.addEventListener("canplaythrough", canPlayThroughHandler);
+      }
+
+      setIsPlaying(!isPlaying);
+    }
   };
 
   const resetAudioPlayer = () => {
@@ -134,7 +140,7 @@ const AudioPlayer = () => {
     }
   };
 
-  const formatTime = (timeInSeconds) => {
+  const formatTime = (timeInSeconds: number) => {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = Math.floor(timeInSeconds % 60);
     return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
@@ -146,12 +152,17 @@ const AudioPlayer = () => {
   return (
     <>
       {loading || contentLoading ? (
-        <InfinitySpin type="Circles" color="#00BFFF" height={80} width={80} />
+        <InfinitySpin color="#00BFFF" width="80" />
       ) : null}
 
       {error || contentError ? <div>Oops! Something went wrong</div> : null}
 
-      <Section text={text} setText={setText} ssml={ssml} setSSML={setSSML} />
+      <SpeechTextEditor
+        text={text}
+        setText={setText}
+        ssml={ssml}
+        setSSML={setSSML}
+      />
 
       <div className="audio-container">
         <audio ref={audioRef} />

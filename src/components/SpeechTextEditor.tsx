@@ -1,9 +1,19 @@
-import React from "react";
 import DOMPurify from "dompurify";
-
 import "../App.css";
 
-const Section = ({ text, setText, ssml, setSSML }) => {
+interface SpeechTextEditorProps {
+  text: string;
+  setText: (value: string) => void;
+  ssml: boolean;
+  setSSML: (ssml: boolean) => void;
+}
+
+const SpeechTextEditor = ({
+  text,
+  setText,
+  ssml,
+  setSSML,
+}: SpeechTextEditorProps) => {
   const sanitizedText = DOMPurify.sanitize(text);
 
   return (
@@ -28,4 +38,4 @@ const Section = ({ text, setText, ssml, setSSML }) => {
   );
 };
 
-export default Section;
+export default SpeechTextEditor;
