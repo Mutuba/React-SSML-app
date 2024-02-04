@@ -2,18 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { AiFillPlayCircle } from "react-icons/ai";
 import { BsPauseCircleFill } from "react-icons/bs";
 import { InfinitySpin } from "react-loader-spinner";
-// import { useDispatch, useSelector } from "react-redux";
 import SpeechTextEditor from "./SpeechTextEditor";
 import useTextToSpeech from "../hooks/useTextToSpeech";
-// import { fetchContent as fetchContentAction } from "../actions/contentActions";
 
 interface AudioPlayerProps {}
 
 const AudioPlayer: React.FC<AudioPlayerProps> = () => {
-  //   const dispatch = useDispatch();
-  //   const content = useSelector((state) => state.content.content);
-  //   const contentLoading = useSelector((state) => state.content.loading);
-  //   const contentError = useSelector((state) => state.content.error);
   const [content, setContent] = useState<string | null>(null);
   const [contentLoading, setContentLoading] = useState(true);
   const [contentError, setContentError] = useState<Error | null>(null);
