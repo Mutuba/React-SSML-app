@@ -11,11 +11,11 @@ const AudioPlayer: React.FC<AudioPlayerProps> = () => {
   const [content, setContent] = useState<string | null>(null);
   const [contentLoading, setContentLoading] = useState(true);
   const [contentError, setContentError] = useState<Error | null>(null);
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [currentTime, setCurrentTime] = useState<number>(0);
-  const [duration, setDuration] = useState<number>(0);
-  const [text, setText] = useState<string>(content || "");
-  const [ssml, setSSML] = useState<boolean>(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [text, setText] = useState(content || "");
+  const [ssml, setSSML] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const progressBarRef = useRef<HTMLDivElement | null>(null);
