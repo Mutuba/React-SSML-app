@@ -4,7 +4,7 @@ This is text-to-speech converter using [AWS Polly](https://aws.amazon.com/polly/
 
 ## Live Site
 
-The project is hosted on Netlify and can be accessed [here](https://mohitur-text-to-speech.netlify.app/).
+The project is hosted on Netlify and can be accessed [here](https://react-ssml.netlify.app//).
 
 ## Features
 
